@@ -1,0 +1,31 @@
+@model WebApplication1.Models.Product
+
+@{
+    ViewData["Title"] = "Product Details";
+}
+
+<h1>@Model.Name</h1>
+
+<div class="row">
+    <div class="col-md-5">
+        <img src="@Model.ImageUrl" alt="@Model.Name" style="width: 100%; max-height: 500px; object-fit: cover;" />
+    </div>
+
+    <div class="col-md-7">
+        <p><b>Description:</b> @Model.Description</p>
+        <p><b>Price:</b> @Model.Price</p>
+        <p><b>Quantity:</b> @Model.Quantity</p>
+        <p><b>Category:</b> @Model.Category.Name</p>
+        <p><b>Brand:</b> @Model.Brand.Name</p>
+        <p><b>Created:</b> @Model.CreatedOn.ToString("dd.MM.yyyy HH:mm")</p>
+        <p><b>Updated:</b> @Model.ModifiedOn.ToString("dd.MM.yyyy HH:mm")</p>
+
+        <a asp-action="Create" asp-controller="Order" asp-route-id="@Model.Id" class="btn btn-success">
+            Order
+        </a>
+
+        <a asp-action="Index" asp-controller="Product" class="btn btn-secondary">
+            Back to products
+        </a>
+    </div>
+</div>

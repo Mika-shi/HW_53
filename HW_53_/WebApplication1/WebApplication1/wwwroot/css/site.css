@@ -1,0 +1,169 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+
+.form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
+  color: var(--bs-secondary-color);
+  text-align: end;
+}
+
+.form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
+  text-align: start;
+}
+
+:root {
+  --dark-brown: #2b1d16;
+  --espresso: #3a271f;
+  --coffee: #5a3f32;
+  --warm-brown: #7a5c49;
+  --taupe: #b8a89b;
+  --sand: #e6d8ca;
+  --cream: #f7f1ea;
+  --ivory: #fffaf7;
+  --soft-border: #ded0c2;
+  --text-dark: #2b211d;
+}
+
+body {
+  background-color: var(--cream);
+  color: var(--text-dark);
+  font-family: Arial, sans-serif;
+}
+
+.navbar {
+  background-color: var(--dark-brown) !important;
+  border-bottom: 1px solid var(--coffee);
+}
+
+.navbar-brand,
+.shop-logo {
+  color: var(--ivory) !important;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.nav-link {
+  color: var(--ivory) !important;
+  font-weight: 500;
+}
+
+.nav-link:hover {
+  color: var(--sand) !important;
+}
+
+h1, h2, h3, h4, h5 {
+  color: var(--dark-brown);
+}
+
+.btn-primary {
+  background-color: var(--espresso);
+  border-color: var(--espresso);
+  color: var(--ivory);
+}
+
+.btn-primary:hover {
+  background-color: var(--dark-brown);
+  border-color: var(--dark-brown);
+}
+
+.btn-success {
+  background-color: var(--coffee);
+  border-color: var(--coffee);
+  color: var(--ivory);
+}
+
+.btn-success:hover {
+  background-color: var(--espresso);
+  border-color: var(--espresso);
+}
+
+.btn-secondary {
+  background-color: var(--taupe);
+  border-color: var(--taupe);
+  color: var(--dark-brown);
+}
+
+.btn-secondary:hover {
+  background-color: var(--warm-brown);
+  border-color: var(--warm-brown);
+  color: var(--ivory);
+}
+
+.btn-outline-primary {
+  border-color: var(--coffee);
+  color: var(--coffee);
+}
+
+.btn-outline-primary:hover {
+  background-color: var(--coffee);
+  border-color: var(--coffee);
+  color: var(--ivory);
+}
+
+.card {
+  background-color: var(--ivory);
+  border: 1px solid var(--soft-border);
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(43, 29, 22, 0.12);
+  overflow: hidden;
+}
+
+.card-img-top {
+  background-color: var(--sand);
+}
+
+.card-title {
+  color: var(--dark-brown);
+  font-weight: 600;
+}
+
+.card-body {
+  background-color: var(--ivory);
+}
+
+.form-control {
+  background-color: var(--ivory);
+  border: 1px solid var(--soft-border);
+  color: var(--text-dark);
+  border-radius: 8px;
+}
+
+.form-control:focus {
+  border-color: var(--coffee);
+  box-shadow: 0 0 0 0.2rem rgba(90, 63, 50, 0.2);
+}
+
+.table {
+  background-color: var(--ivory);
+  color: var(--text-dark);
+}
+
+.table th {
+  color: var(--dark-brown);
+}
+
+.alert-warning {
+  background-color: #f4eadc;
+  border-color: var(--sand);
+  color: var(--coffee);
+}
