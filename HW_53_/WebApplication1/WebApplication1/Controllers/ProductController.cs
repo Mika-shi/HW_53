@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using WebApplication1.Models;
-using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace WebApplication1.Controllers;
 
@@ -15,28 +14,111 @@ public class ProductController : Controller
         _context = context;
     }
 
-    public IActionResult Index(int? categoryId, int? brandId)
+   public IActionResult Index(
+    string? name,
+    int? categoryId,
+    int? brandId,
+    DateTime? createdFrom,
+    DateTime? createdTo,
+    decimal? minPrice,
+    decimal? maxPrice,
+    ProductSortState sortOrder = ProductSortState.NameAsc)
+{
+    var products = _context.Products
+        .Include(p => p.Category)
+        .Include(p => p.Brand)
+        .AsQueryable();
+
+    if (!string.IsNullOrWhiteSpace(name))
     {
-        var products = _context.Products
-            .Include(p => p.Category)
-            .Include(p => p.Brand)
-            .AsQueryable();
-
-        if (categoryId != null)
-        {
-            products = products.Where(p => p.CategoryId == categoryId);
-        }
-
-        if (brandId != null)
-        {
-            products = products.Where(p => p.BrandId == brandId);
-        }
-
-        ViewBag.Categories = new SelectList(_context.Categories.ToList(), "Id", "Name", categoryId);
-        ViewBag.Brands = new SelectList(_context.Brands.ToList(), "Id", "Name", brandId);
-
-        return View(products.ToList());
+        name = name.Trim();
+        products = products.Where(p => p.Name.ToLower().Contains(name.ToLower()));
     }
+
+    if (categoryId != null)
+    {
+        products = products.Where(p => p.CategoryId == categoryId);
+    }
+
+    if (brandId != null)
+    {
+        products = products.Where(p => p.BrandId == brandId);
+    }
+
+    if (createdFrom != null)
+    {
+        DateTime fromDate = DateTime.SpecifyKind(createdFrom.Value.Date, DateTimeKind.Utc);
+        products = products.Where(p => p.CreatedOn >= fromDate);
+    }
+
+    if (createdTo != null)
+    {
+        DateTime toDate = DateTime.SpecifyKind(createdTo.Value.Date.AddDays(1), DateTimeKind.Utc);
+        products = products.Where(p => p.CreatedOn < toDate);
+    }
+
+    if (minPrice != null)
+    {
+        products = products.Where(p => p.Price >= minPrice);
+    }
+
+    if (maxPrice != null)
+    {
+        products = products.Where(p => p.Price <= maxPrice);
+    }
+
+    ViewBag.NameSort = sortOrder == ProductSortState.NameAsc
+        ? ProductSortState.NameDesc
+        : ProductSortState.NameAsc;
+
+    ViewBag.BrandSort = sortOrder == ProductSortState.BrandAsc
+        ? ProductSortState.BrandDesc
+        : ProductSortState.BrandAsc;
+
+    ViewBag.CreatedOnSort = sortOrder == ProductSortState.CreatedOnDesc
+        ? ProductSortState.CreatedOnAsc
+        : ProductSortState.CreatedOnDesc;
+
+    ViewBag.CategorySort = sortOrder == ProductSortState.CategoryAsc
+        ? ProductSortState.CategoryDesc
+        : ProductSortState.CategoryAsc;
+
+    ViewBag.PriceSort = sortOrder == ProductSortState.PriceAsc
+        ? ProductSortState.PriceDesc
+        : ProductSortState.PriceAsc;
+
+    products = sortOrder switch
+    {
+        ProductSortState.NameDesc => products.OrderByDescending(p => p.Name),
+
+        ProductSortState.BrandAsc => products.OrderBy(p => p.Brand!.Name),
+        ProductSortState.BrandDesc => products.OrderByDescending(p => p.Brand!.Name),
+
+        ProductSortState.CreatedOnAsc => products.OrderBy(p => p.CreatedOn),
+        ProductSortState.CreatedOnDesc => products.OrderByDescending(p => p.CreatedOn),
+
+        ProductSortState.CategoryAsc => products.OrderBy(p => p.Category!.Name),
+        ProductSortState.CategoryDesc => products.OrderByDescending(p => p.Category!.Name),
+
+        ProductSortState.PriceAsc => products.OrderBy(p => p.Price),
+        ProductSortState.PriceDesc => products.OrderByDescending(p => p.Price),
+
+        _ => products.OrderBy(p => p.Name)
+    };
+
+    ViewBag.Categories = new SelectList(_context.Categories.ToList(), "Id", "Name", categoryId);
+    ViewBag.Brands = new SelectList(_context.Brands.ToList(), "Id", "Name", brandId);
+
+    ViewBag.Name = name;
+    ViewBag.CategoryId = categoryId;
+    ViewBag.BrandId = brandId;
+    ViewBag.CreatedFrom = createdFrom?.ToString("yyyy-MM-dd");
+    ViewBag.CreatedTo = createdTo?.ToString("yyyy-MM-dd");
+    ViewBag.MinPrice = minPrice;
+    ViewBag.MaxPrice = maxPrice;
+
+    return View(products.ToList());
+}
 
     public IActionResult Create()
     {
